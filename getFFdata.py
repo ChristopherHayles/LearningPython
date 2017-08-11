@@ -2,14 +2,11 @@
 """
 Created on Tue Aug  8 10:32:09 2017
 
-@author: U6027882
+@author: Chris Hayles
 """
 
-#seasonsToCheck=[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
-#weeksToCheck=[101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117]
-
-seasonsToCheck=[2016]
-weeksToCheck=[101]
+seasonsToCheck=[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
+weeksToCheck=[101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117]
 
 #seasonsToCheck=[2016]
 #weeksToCheck=[101]
@@ -124,7 +121,7 @@ def ParseRecTable(RecTable):
     df['FumL']=FumL
     return df
     
-def ParsePassTable(RecTable):
+def ParsePassTable(PassTable):
     Player=[]
     Team=[]
     Comp=[]
@@ -142,7 +139,7 @@ def ParsePassTable(RecTable):
     SckYds=[]
     Fum=[]
     FumL=[]
-    for row in RecTable.find_all("tr"):
+    for row in PassTable.find_all("tr"):
         cells = row.find_all("td")
         if cells:
             player = cells[0].find("a", class_="wisbb_fullPlayer")
@@ -169,6 +166,7 @@ def ParsePassTable(RecTable):
             Fum.append(cells[14].string)
             FumL.append(cells[15].string)
     df = pd.DataFrame(Player, columns=['Name'])
+    df['Team']=Team
     df['Comp']=Comp
     df['Att']=Att
     df['CompPct']=CompPct
@@ -281,7 +279,7 @@ def GetPassStatsIteratable(seasons,weeks):
             frames.append(GetPassStats(str(season),str(week)))
     allData = pd.concat(frames, ignore_index=True)
     return allData
-    
+"""    
 RushStats = GetRushStatsIteratable(seasonsToCheck,weeksToCheck)
 rushFile_name="rushing.csv"
 RushStats.to_csv(rushFile_name, encoding='utf-8', index=False)
@@ -289,7 +287,7 @@ RushStats.to_csv(rushFile_name, encoding='utf-8', index=False)
 RecStats = GetRecStatsIteratable(seasonsToCheck,weeksToCheck)
 recFile_name="receiving.csv"
 RecStats.to_csv(recFile_name, encoding='utf-8', index=False)
-
+"""
 PassingStats = GetPassStatsIteratable(seasonsToCheck,weeksToCheck)
 passFile_name="passing.csv"
 PassingStats.to_csv(passFile_name, encoding='utf-8', index=False)
